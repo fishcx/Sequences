@@ -1,0 +1,400 @@
+<script>
+	$(document).ready(function() {
+    
+    $('.changeItem').change(function(){
+        $('#generate').click();
+    });
+
+    $(document).keypress(function (e) {
+        var key = e.which;
+         if(key == 13)  // the enter key code
+         {
+            $('#generate').click();
+             return false;  
+          }
+    });
+    
+    $('#video-button').hide();  
+     
+    var testing = false;
+    $('#generate').click(function(){
+        if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
+        generate(parseInt($("#stype").val()),parseInt($("#ptype").val()));
+     });
+
+
+    $("#show-answer").click(function(){
+       if($("#answer").is(":hidden") ){
+          $("#answer").show();
+          $("#show-answer").val("Hide Answer");
+       } else{
+         $("#answer").hide();
+         $("#show-answer").val("Show Answer");
+        }
+    });
+    
+    if(testing){ $("#answer").show();} 
+     
+	});
+    
+	function generate(stype, ptype){
+       
+       this.output = "";
+       this.answer = "";
+       
+       // if the type of sequence picked is Both, randomly pick one or the other
+       if(stype == 3){
+         
+         stype = random(1,2);
+         
+       }
+       
+       var videoLinks = [       // arithmetic
+                                ["https://www.youtube.com/watch?v=j5VFYjIp8Ys",
+                                 "https://www.youtube.com/watch?v=-FBSgbQt3Zc",
+                                 "https://www.youtube.com/watch?v=5x1dH6JOSlU"],
+                                // geometric     
+                                ["https://www.youtube.com/watch?v=lIKZ5z11_U8",
+                                 "https://www.youtube.com/watch?v=Wf9qsrwJANo",
+                                 "https://www.youtube.com/watch?v=bXpFDgbQGaM"]       
+                          ];             
+       
+       $("#output").html("");
+       $("#answer").html("");
+       
+       if(videoLinks[stype-1][ptype-1].length != 0){ 
+             $("#videoLink"). attr("href", videoLinks[stype-1][ptype-1]);
+             $('#video-button').show();
+           }
+           else{
+             $('#video-button').hide();
+           }
+       
+       switch(ptype) {          
+       
+           case 1: RtoE(stype); break;
+           case 2: EtoR(stype); break;
+           case 3: StoE(stype); break;  
+       }
+    
+       $("#output").html("\\("+doublesigns(output)+"\\)");
+       $("#answer").html("\\("+doublesigns(answer)+"\\)");
+       renderMathInElement(document.body);
+       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"output"]);
+       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+       
+	}
+	   // recursive to explicit
+    function RtoE(stype){
+       
+       var change = "";
+       var initial = "";
+       var a1 = "";
+       var out = "";
+       var ans = "";
+       
+       switch(stype) {
+           // arithmetic
+           case 1: 
+           
+           change = non_zero_random(-10,10);
+           initial = non_zero_random(-20,20);
+           a1 = initial + change;
+           
+           switch(random(0,3)){
+              
+              // an notation + 1
+              case 0: 
+              
+              this.output = "a_{n+1} = a_n +"+change+" , a_1 = "+a1;
+              this.answer = "a_n = "+a1+" + "+change+"(n-1)~~or~~ a_n = "+change+"n + "+initial;
+              
+              break;
+              
+              // f(x) notation + 1 
+              case 1: 
+              
+              this.output = "f(x+1) = f(x) +"+change+" , f(1) = "+a1;
+              this.answer = "f(x) = "+a1+" + "+change+"(x-1)~~or~~ f(x) = "+change+"x + "+initial;
+              
+              break;
+              
+              // an notation - 1
+              case 2: 
+              
+              this.output = "a_{n} = a_{n-1} +"+change+" , a_1 = "+a1;
+              this.answer = "a_n = "+a1+" + "+change+"(n-1)~~or~~ a_n = "+change+"n + "+initial;
+              
+              break;
+              
+              // f(x) notation - 1 
+              case 3: 
+              
+              this.output = "f(x) = f(x-1) +"+change+" , f(1) = "+a1;
+              this.answer = "f(x) = "+a1+" + "+change+"(x-1)~~or~~ f(x) = "+change+"x + "+initial;
+              
+              break;
+
+           }
+           
+           break;
+           
+           // geometric
+           case 2:  
+           
+           change = non_zero_random(-8,8);
+           initial = non_zero_random(-10,10);
+           a1 = initial*change;
+           
+           switch(random(0,3)){
+              
+              // an notation + 1
+              case 0: 
+              
+              this.output = "a_{n+1} = a_n ⋅"+change+" , a_1 = "+a1;
+              this.answer = "a_n = "+a1+"("+change+")^{n-1}~~or~~ a_n = "+initial+"("+change+")^n";
+              
+              break;
+              
+              // f(x) notation + 1 
+              case 1: 
+              
+              this.output = "f(x+1) = f(x) ⋅"+change+" , f(1) = "+a1;
+              this.answer = "f(x) = "+a1+"("+change+")^{x-1}~~or~~ f(x) = "+initial+"("+change+")^x";
+              
+              break;
+              
+              // an notation - 1
+              case 2: 
+              
+              this.output = "a_{n} = a_{n-1} ⋅"+change+" , a_1 = "+a1;
+              this.answer = "a_n = "+a1+"("+change+")^{n-1}~~or~~ a_n = "+initial+"("+change+")^n";
+              
+              break;
+              
+              // f(x) notation - 1 
+              case 3: 
+              
+              this.output = "f(x) = f(x-1) ⋅"+change+" , f(1) = "+a1;
+              this.answer = "f(x) = "+a1+"("+change+")^{x-1}~~or~~ f(x) = "+initial+"("+change+")^x";
+              
+              break;
+
+           }
+           
+           break;        
+       }
+         
+    }
+    
+    // explicit to recursive
+    function EtoR(stype){
+
+       var change = "";
+       var initial = "";
+       var a1 = "";
+       var out = "";
+       var ans = "";
+       
+       switch(stype) {
+           // arithmetic
+           case 1: 
+           
+           change = non_zero_random(-10,10);
+           initial = non_zero_random(-20,20);
+           a1 = initial + change;
+           
+           switch(random(0,3)){
+              
+              // an notation + 1
+              case 0: 
+              
+              this.answer = "a_{n+1} = a_n +"+change+" , a_1 = "+a1;
+              this.output = "a_n = "+a1+" + "+change+"(n-1)~~or~~ a_n = "+change+"n + "+initial;
+              
+              break;
+              
+              // f(x) notation + 1 
+              case 1: 
+              
+              this.answer = "f(x+1) = f(x) +"+change+" , f(1) = "+a1;
+              this.output = "f(x) = "+a1+" + "+change+"(x-1)~~or~~ f(x) = "+change+"x + "+initial;
+              
+              break;
+              
+              // an notation - 1
+              case 2: 
+              
+              this.answer = "a_{n} = a_{n-1} +"+change+" , a_1 = "+a1;
+              this.output = "a_n = "+a1+" + "+change+"(n-1)~~or~~ a_n = "+change+"n + "+initial;
+              
+              break;
+              
+              // f(x) notation - 1 
+              case 3: 
+              
+              this.answer = "f(x) = f(x-1) +"+change+" , f(1) = "+a1;
+              this.output = "f(x) = "+a1+" + "+change+"(x-1)~~or~~ f(x) = "+change+"x + "+initial;
+              
+              break;
+
+           }
+           
+           break;
+           
+           // geometric
+           case 2:  
+           
+           change = non_zero_random(-8,8);
+           initial = non_zero_random(-10,10);
+           a1 = initial*change;
+           
+           switch(random(0,3)){
+              
+              // an notation + 1
+              case 0: 
+              
+              this.answer = "a_{n+1} = a_n ⋅"+change+" , a_1 = "+a1;
+              this.output = "a_n = "+a1+"("+change+")^{n-1}~~or~~ a_n = "+initial+"("+change+")^n";
+              
+              break;
+              
+              // f(x) notation + 1 
+              case 1: 
+              
+              this.answer = "f(x+1) = f(x) ⋅"+change+" , f(1) = "+a1;
+              this.output = "f(x) = "+a1+"("+change+")^{x-1}~~or~~ f(x) = "+initial+"("+change+")^x";
+              
+              break;
+              
+              // an notation - 1
+              case 2: 
+              
+              this.answer = "a_{n} = a_{n-1} ⋅"+change+" , a_1 = "+a1;
+              this.output = "a_n = "+a1+"("+change+")^{n-1}~~or~~ a_n = "+initial+"("+change+")^n";
+              
+              break;
+              
+              // f(x) notation - 1 
+              case 3: 
+              
+              this.answer = "f(x) = f(x-1) ⋅"+change+" , f(1) = "+a1;
+              this.output = "f(x) = "+a1+"("+change+")^{x-1}~~or~~ f(x) = "+initial+"("+change+")^x";
+              
+              break;
+
+           }
+           
+           break;
+       
+       }
+
+    }
+    
+    // sequence to explicit
+    function StoE(stype){
+       
+       var change = "";
+       var initial = "";
+       var a1 = ""; var a2 = ""; var a3 = ""; var a4 = ""; var a5 = ""; var a6 = "";
+       var out = "";
+       var ans = "";
+       
+       switch(stype) {
+           // arithmetic
+           case 1: 
+           
+           change = non_zero_random(-10,10);
+           initial = non_zero_random(-20,20);
+           a1 = initial + change; a2 = a1 + change; a3 = a2+change; a4 = a3+change; a5 = a4+change; a6 = a5+change;
+
+           switch(random(0,1)){
+              
+              // an notation + 1
+              case 0: 
+              
+              this.output = a1+", "+a2+", "+a3+", "+a4+", "+a5+", "+a6+", ... ";
+              this.answer = "a_n = "+a1+" + "+change+"(n-1)~~or~~ a_n = "+change+"n + "+initial;
+              
+              break;
+              
+              // f(x) notation + 1 
+              case 1: 
+              
+              this.output = a1+", "+a2+", "+a3+", "+a4+", "+a5+", "+a6+", ... ";
+              this.answer = "f(x) = "+a1+" + "+change+"(x-1)~~or~~ f(x) = "+change+"x + "+initial;
+              
+              break;
+
+           }
+           
+           break;
+           
+           // geometric
+           case 2:  
+           
+           change = non_zero_random(-8,8);
+           initial = non_zero_random(-10,10);
+           a1 = initial*change;
+           a1 = initial*change; a2 = a1*change; a3 = a2*change; a4 = a3*change; a5 = a4*change; a6 = a5*change;
+           
+           switch(random(0,1)){
+              
+              // an notation + 1
+              case 0: 
+              
+              this.output = a1+", "+a2+", "+a3+", "+a4+", "+a5+", "+a6+", ... ";
+              this.answer = "a_n = "+a1+"("+change+")^{n-1}~~or~~ a_n = "+initial+"("+change+")^n";
+              
+              break;
+              
+              // f(x) notation + 1 
+              case 1: 
+              
+              this.output = a1+", "+a2+", "+a3+", "+a4+", "+a5+", "+a6+", ... ";
+              this.answer = "f(x) = "+a1+"("+change+")^{x-1}~~or~~ f(x) = "+initial+"("+change+")^x";
+              
+              break;
+
+           }
+           
+           break;
+                    
+       }
+
+    }
+    
+    // removes all double signs
+    function doublesigns(string){
+
+       return string.replaceAll("-+", "-").replaceAll("- +", "-").replaceAll("+ -", "-").replaceAll("- -", "+").replaceAll("+-", "-").replaceAll("-- ", "+");
+    }
+     // random integer between and including min and max
+      function random(min, max) {
+         return Math.floor(Math.random() * (max - min + 1) ) + min;
+         } 
+    
+       // random non-zero integer bewteen min and max
+       function non_zero_random(min, max) {
+         
+           var output;
+         
+           do{output = Math.floor(Math.random() * (max - min + 1) ) + min;} while (output === 0);
+         
+           return output;
+       } 
+       
+       String.prototype.replaceAll = function(searchStr, replaceStr) {
+	var str = this;
+
+    // no match exists in string?
+    if(str.indexOf(searchStr) === -1) {
+        // return string
+        return str;
+    }
+
+    // replace and remove first match, and do another recursirve search/replace
+    return (str.replace(searchStr, replaceStr)).replaceAll(searchStr, replaceStr);
+}
+
+</script>
