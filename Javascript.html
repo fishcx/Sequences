@@ -14,6 +14,16 @@
           }
     });
     
+    $('#stype').change(function(){
+
+        if($(this).val() == 4){
+          $('#typeSpan').hide();
+        }else{
+          $('#typeSpan').show();
+        }
+
+    });
+
     $('#video-button').hide();  
      
     var testing = false;
@@ -48,7 +58,15 @@
          stype = random(1,2);
          
        }
-       
+       if( stype == 4){
+
+          notAorG();
+          $("#output").html(doublesigns(output));
+          $("#answer").html("\\("+doublesigns(answer)+"\\)");
+          renderMathInElement(document.body); 
+
+       }
+       else{
        var videoLinks = [       // arithmetic
                                 ["https://www.youtube.com/watch?v=j5VFYjIp8Ys",
                                  "https://www.youtube.com/watch?v=-FBSgbQt3Zc",
@@ -76,12 +94,11 @@
            case 2: EtoR(stype); break;
            case 3: StoE(stype); break;  
        }
-    
+
        $("#output").html("\\("+doublesigns(output)+"\\)");
        $("#answer").html("\\("+doublesigns(answer)+"\\)");
-       renderMathInElement(document.body);
-       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"output"]);
-       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+       renderMathInElement(document.body); 
+       }
        
 	}
 	   // recursive to explicit
@@ -364,6 +381,98 @@
 
     }
     
+    function notAorG(){
+      var numTerms = random(3,5);
+      
+      var seq = "";
+      var ans = "";
+      var seqNot = recursHelper();
+      
+      switch(random(0,1)){
+
+        case 0:
+        var a = non_zero_random(-4,4);
+        var b = non_zero_random(-5,5);
+        var init = random(-5,5);
+        seq = "\\("+seqNot.next+" = "+a+"("+seqNot.now+")^2+"+b+"\\)";
+        
+        var curr = init;
+        ans += init+", ";
+
+        for(var i = 1; i < numTerms; i++){
+
+          var temp = "";
+          temp = a*(curr)**2+b; 
+          ans += temp+", ";
+          curr = temp;
+        }
+        
+        break;
+
+        case 1:
+        var a = non_zero_random(-4,4);
+        var b = non_zero_random(-5,5);
+        var init = random(-5,5);
+        seq = "\\("+seqNot.next+" = "+b+"+"+a+"("+seqNot.now+")\\)";
+        
+        var curr = init;
+        ans += init+", ";
+
+        for(var i = 1; i < numTerms; i++){
+
+          var temp = "";
+          temp = a*(curr)+b; 
+          ans += temp+", ";
+          curr = temp;
+        }
+        
+        break;
+
+      }
+      // remove last comma and white space
+      ans = ans.substring(0,ans.lastIndexOf(","));
+
+      this.output = "Determine the first "+numTerms+" terms of the sequence "+seq+" if \\("+seqNot.start+"="+init+"\\)";
+      this.answer = ans;
+
+    }
+
+    function recursHelper(){
+
+      var now,next,start;
+
+      switch(random(0,3)){
+
+          case 0:
+          now = "a_n"
+          next = "a_{n+1}"
+          start = "a_1";
+          break;
+
+          case 1:
+          now = "a_{n-1}"
+          next = "a_{n}"
+          start = "a_1";
+          break;
+
+          case 2:
+          now = "f(x-1)"
+          next = "f(x)"
+          start = "f(1)";
+          break;
+
+          case 3:
+          now = "f(x)"
+          next = "f(x+1)"
+          start = "f(1)";
+          break;
+
+      }
+
+      return {now: now, next: next, start:start}
+
+    }
+
     // removes all double signs
     function doublesigns(string){
 
