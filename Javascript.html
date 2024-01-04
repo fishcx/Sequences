@@ -29,7 +29,8 @@
     var testing = false;
     $('#generate').click(function(){
         if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
-        generate(parseInt($("#stype").val()),parseInt($("#ptype").val()));
+        //generate(parseInt($("#stype").val()),parseInt($("#ptype").val()));
+        generate(parseInt($("#stype").val()),3);
      });
 
 
@@ -58,12 +59,15 @@
          stype = random(1,2);
          
        }
-       if( stype == 4){
+       if( stype == 4){ // neither - recursive
 
           notAorG();
           $("#output").html(doublesigns(output));
           $("#answer").html("\\("+doublesigns(answer)+"\\)");
           renderMathInElement(document.body); 
+          // change video button
+          $("#videoLink"). attr("href", "https://www.youtube.com/watch?v=CK5NJdchdKQ");
+          $('#video-button').show();
 
        }
        else{
