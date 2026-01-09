@@ -329,13 +329,15 @@
            initial = non_zero_random(-20,20);
            a1 = initial + change; a2 = a1 + change; a3 = a2+change; a4 = a3+change; a5 = a4+change; a6 = a5+change;
 
-           switch(random(0,1)){
+           // only do a_n
+           //switch(random(0,1)){
+           switch(0){
               
               // an notation + 1
               case 0: 
               
               this.output = a1+", "+a2+", "+a3+", "+a4+", "+a5+", "+a6+", ... ";
-              this.answer = "a_n = "+a1+" + "+change+"(n-1)~~or~~ a_n = "+change+"n + "+initial;
+              this.answer = "a_n = "+a1+" + "+change+"(n-1)~~\\text{or}~~ a_n = "+change+"n + "+initial;
               
               break;
               
@@ -359,13 +361,14 @@
            a1 = initial*change;
            a1 = initial*change; a2 = a1*change; a3 = a2*change; a4 = a3*change; a5 = a4*change; a6 = a5*change;
            
-           switch(random(0,1)){
-              
+           // only do a_n
+           //switch(random(0,1)){
+           switch(0){   
               // an notation + 1
               case 0: 
               
               this.output = a1+", "+a2+", "+a3+", "+a4+", "+a5+", "+a6+", ... ";
-              this.answer = "a_n = "+a1+"("+change+")^{n-1}~~or~~ a_n = "+initial+"("+change+")^n";
+              this.answer = "a_n = "+a1+"("+change+")^{n-1}~~\\text{or}~~ a_n = "+initial+"("+change+")^n";
               
               break;
               
